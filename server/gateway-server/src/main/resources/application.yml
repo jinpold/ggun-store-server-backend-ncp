@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: gateway-server
+  profile:
+    active: local
+  config:
+    import: optional:configserver:http://localhost:8888

@@ -1,0 +1,12 @@
+rootProject.name = 'backend'
+include 'service:account-service'
+include 'service:alarm-service'
+include 'service:admin-service'
+include 'service:chat-service'
+include 'service:user-service'
+
+
+include 'server:gateway-server'
+include 'server:eureka-server'
+include 'server:secret-server'
+include 'server:config-server'

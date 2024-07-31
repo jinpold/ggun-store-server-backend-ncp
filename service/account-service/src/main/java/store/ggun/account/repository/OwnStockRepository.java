@@ -1,0 +1,34 @@
+package store.ggun.account.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import store.ggun.account.domain.model.OwnStockModel;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface OwnStockRepository extends JpaRepository<OwnStockModel,Long> {
+
+
+
+    Optional<OwnStockModel> findByPdnoAndAccountIdAndTradeType(String pdno, Long account, String tradeType);
+
+
+    int deleteByPdnoAndAccountId(String pdno, Long account);
+
+    List<OwnStockModel> findByAccountId(Long id);
+
+
+    @Modifying
+    @Query("update own_stocks set pdQty = :pdQty,avgPrvs=:avgPrvs where id = :id")
+    int modifyStock(@Param("id")long id, @Param("pdQty")long pdQty, @Param("avgPrvs")long avgPrvs);
+
+    @Modifying
+    @Query("update own_stocks set pdQty = :pdQty where id = :id")
+    int modifyStock(@Param("id")long id, @Param("pdQty")long pdQty);
+
+}
