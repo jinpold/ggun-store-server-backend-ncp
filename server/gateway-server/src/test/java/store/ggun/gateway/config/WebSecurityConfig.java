@@ -11,13 +11,20 @@ import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import store.ggun.gateway.handler.CustomAuthenicationFailureHandler;
 import store.ggun.gateway.handler.CustomAuthenticationSuccessHandler;
+
+import java.util.List;
 
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenicationFailureHandler customAuthenicationFailureHandler;
     private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
 
     @Bean
@@ -32,6 +39,7 @@ public class WebSecurityConfig {
                 .authorizeExchange(authorize ->
                         authorize.anyExchange().permitAll()
                 )
+                .cors(i -> i.configurationSource(configurationSource()))
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .httpBasic(i -> i.disable())
                 .csrf(i -> i.disable())
@@ -39,7 +47,20 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .authorizationRequestResolver(serverOAuth2AuthorizationRequestResolver())
                         .authenticationSuccessHandler(customAuthenticationSuccessHandler)
+                        .authenticationFailureHandler(customAuthenicationFailureHandler)
                 )
                 .build();
+    }
+    @Bean
+    public CorsConfigurationSource configurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://ggun.store"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

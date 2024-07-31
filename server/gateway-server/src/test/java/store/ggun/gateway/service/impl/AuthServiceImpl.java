@@ -1,22 +1,28 @@
-package store.ggun.gateway.filter;
+package store.ggun.gateway.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import store.ggun.gateway.domain.dto.LoginDto;
 import store.ggun.gateway.domain.model.PrincipalUserDetails;
+import store.ggun.gateway.domain.vo.ExceptionStatus;
+import store.ggun.gateway.exception.GatewayException;
+import store.ggun.gateway.service.AuthService;
 import store.ggun.gateway.service.provider.JwtTokenProvider;
 
-@Component
+@Slf4j
+@Service
 @RequiredArgsConstructor
-public class AuthFilter{
+public class AuthServiceImpl implements AuthService {
     private final WebClient webClient;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Override
     public Mono<ServerResponse> localLogin(LoginDto dto) {
         return Mono.just(dto)
                 .log()
@@ -29,15 +35,13 @@ public class AuthFilter{
                                 .bodyToMono(PrincipalUserDetails.class)
                 )
                 .log()
+                .doOnNext(i -> log.info(">>> PrincipalUserDetails: {}", i.toString()))
                 .flatMap(i ->
                         jwtTokenProvider.generateToken(i, false)
-                                .log()
                                 .flatMap(accessToken ->
                                         jwtTokenProvider.generateToken(i, true)
-                                                .log()
                                                 .flatMap(refreshToken ->
                                                         ServerResponse.ok()
-                                                                .contentType(MediaType.APPLICATION_JSON)
                                                                 .cookie(
                                                                         ResponseCookie.from("accessToken")
                                                                                 .value(accessToken)
@@ -54,22 +58,29 @@ public class AuthFilter{
                                                                                 // .httpOnly(true)
                                                                                 .build()
                                                                 )
-                                                                .bodyValue(Boolean.TRUE)
+                                                                .build()
                                                 )
                                 )
                 )
+                .log()
+                .onErrorMap(Exception.class, e -> new GatewayException(ExceptionStatus.UNAUTHORIZED, "Invalid User"))
+                .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED, "Invalid User")))
+                .onErrorResume(GatewayException.class, e -> ServerResponse.status(e.getStatus().getStatus().value()).bodyValue(e.getMessage()))
                 ;
-
-
     }
 
+    @Override
     public Mono<ServerResponse> refresh(String refreshToken) {
         return Mono.just(refreshToken)
-                .flatMap(i -> Mono.just(jwtTokenProvider.removeBearer(refreshToken)))
-                .filter(i -> jwtTokenProvider.isTokenValid(refreshToken, true))
-                .filterWhen(i -> jwtTokenProvider.isTokenInRedis(refreshToken))
-                .flatMap(i -> Mono.just(jwtTokenProvider.extractPrincipalUserDetails(refreshToken)))
-                .flatMap(i -> jwtTokenProvider.generateToken(i, false))
+                .flatMap(bearerToken -> Mono.just(jwtTokenProvider.removeBearer(bearerToken)))
+                .filter(jwtToken -> jwtTokenProvider.isTokenValid(jwtToken, true))
+                .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED, "Invalid Refresh Token")))
+                .flatMap(jwtToken ->
+                        Mono.just(jwtTokenProvider.extractPrincipalUserDetails(jwtToken))
+                                .filterWhen(user -> jwtTokenProvider.isTokenInRedis(user.getUsername(), jwtToken))
+                                .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED, "Token not found in Redis")))
+                                .flatMap(i -> jwtTokenProvider.generateToken(i, false))
+                )
                 .flatMap(accessToken ->
                         ServerResponse.ok()
                                 .cookie(
@@ -81,15 +92,24 @@ public class AuthFilter{
                                                 .build()
                                 )
                                 .build()
-                );
+                )
+                .onErrorResume(GatewayException.class, e -> ServerResponse.status(e.getStatus().getStatus().value()).bodyValue(e.getMessage()));
     }
 
+
+    @Override
     public Mono<ServerResponse> logout(String refreshToken) {
         return Mono.just(refreshToken)
-                .flatMap(i -> Mono.just(jwtTokenProvider.removeBearer(refreshToken)))
-                .filter(i -> jwtTokenProvider.isTokenValid(refreshToken, true))
-                .filterWhen(i -> jwtTokenProvider.isTokenInRedis(refreshToken))
-                .filterWhen(i -> jwtTokenProvider.removeTokenInRedis(refreshToken))
-                .flatMap(i -> ServerResponse.ok().build());
+                .flatMap(bearerToken -> Mono.just(jwtTokenProvider.removeBearer(bearerToken)))
+                .filter(jwtToken -> jwtTokenProvider.isTokenValid(jwtToken, false))
+                .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED, "Invalid Refresh Token")))
+                .flatMap(jwtToken ->
+                        Mono.just(jwtTokenProvider.extractPrincipalUserDetails(jwtToken))
+                                .filterWhen(user -> jwtTokenProvider.removeTokenInRedis(user.getUsername()))
+                                .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED, "Token not found in Redis")))
+                )
+                .flatMap(i -> ServerResponse.ok().build())
+                .onErrorResume(GatewayException.class, e -> ServerResponse.status(e.getStatus().getStatus().value()).bodyValue(e.getMessage()));
     }
+
 }

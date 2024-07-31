@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.ReactiveValueOperations;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import store.ggun.gateway.domain.model.PrincipalUserDetails;
 import store.ggun.gateway.domain.model.UserModel;
+import store.ggun.gateway.domain.vo.ExceptionStatus;
 import store.ggun.gateway.domain.vo.Role;
+import store.ggun.gateway.exception.GatewayException;
 
 import javax.crypto.SecretKey;
 import java.time.Duration;
@@ -25,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider{
@@ -99,18 +102,18 @@ public class JwtTokenProvider{
                     .parseSignedClaims(jwt)
                     .getPayload();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            log.error("extractAllClaims Error: {}", e.getMessage());
+            throw new GatewayException(ExceptionStatus.UNAUTHORIZED, "Invalid Token");
         }
     }
 
     public Boolean isTokenValid(String token, Boolean isRefreshToken) {
-        return !isTokenExpired(token)
-                && isTokenTypeEqual(token, isRefreshToken);
+        return !isTokenExpired(token) && isTokenTypeEqual(token, isRefreshToken);
     }
 
-    public Mono<Boolean> isTokenInRedis(String token){
-        return reactiveValueOperations.get(token)
-                .flatMap(i -> Mono.just(i != null));
+    public Mono<Boolean> isTokenInRedis(String email, String token){
+        return reactiveValueOperations.get(email)
+                .flatMap(i -> Mono.just(token.equals(i)));
     }
 
     private Boolean isTokenExpired(String token){
@@ -122,14 +125,14 @@ public class JwtTokenProvider{
     }
 
     public String removeBearer(String bearerToken){
-        return bearerToken.replace("Bearer ", "");
+        return bearerToken.startsWith("Bearer ") ? bearerToken.substring(7) : "";
     }
 
     public PrincipalUserDetails extractPrincipalUserDetails(String jwt){
         return new PrincipalUserDetails(UserModel.builder().email(extractEmail(jwt)).roles(extractRoles(jwt).stream().map(i -> Role.valueOf(i)).toList()).build());
     }
 
-    public Mono<Boolean> removeTokenInRedis(String token){
-        return reactiveValueOperations.delete(token);
+    public Mono<Boolean> removeTokenInRedis(String email){
+        return reactiveValueOperations.delete(email);
     }
 }
