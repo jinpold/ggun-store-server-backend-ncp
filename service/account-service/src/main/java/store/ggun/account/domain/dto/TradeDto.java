@@ -1,11 +1,17 @@
 package store.ggun.account.domain.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 @NoArgsConstructor

@@ -2,6 +2,8 @@ package store.ggun.admin.files;
 
 
 import lombok.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,10 +1,10 @@
 package store.ggun.account.serviceImpl;
 
+import store.ggun.account.domain.dto.KIvTokenRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import store.ggun.account.domain.dto.KIvTokenRequestDto;
 
 @Component
 @RequiredArgsConstructor

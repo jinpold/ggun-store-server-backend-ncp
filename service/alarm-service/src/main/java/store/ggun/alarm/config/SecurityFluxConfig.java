@@ -1,11 +1,10 @@
 package store.ggun.alarm.config;
-
-import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Configuration
 @EnableWebFluxSecurity

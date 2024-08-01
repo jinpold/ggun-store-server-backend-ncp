@@ -1,6 +1,7 @@
 package store.ggun.user.domain;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor

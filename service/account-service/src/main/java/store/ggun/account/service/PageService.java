@@ -1,7 +1,7 @@
 package store.ggun.account.service;
 
-import org.springframework.stereotype.Component;
 import store.ggun.account.domain.dto.PageDto;
+import org.springframework.stereotype.Component;
 
 @Component
 public interface PageService {

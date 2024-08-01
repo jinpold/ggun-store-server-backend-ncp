@@ -1,12 +1,11 @@
 package store.ggun.alarm.domain.dto;
+import java.util.List;
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Data

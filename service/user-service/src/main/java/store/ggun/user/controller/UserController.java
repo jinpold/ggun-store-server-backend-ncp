@@ -1,16 +1,22 @@
 package store.ggun.user.controller;
 
 
+import org.apache.coyote.Response;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import store.ggun.user.config.PrincipalDetailsService;
+import store.ggun.user.domain.TokenVo;
+import store.ggun.user.domain.UserDto;
+import store.ggun.user.service.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.web.bind.annotation.*;
-import store.ggun.user.domain.TokenVo;
-import store.ggun.user.domain.UserDto;
-import store.ggun.user.service.UserService;
 
 import java.util.Optional;
 

@@ -15,13 +15,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
-import store.ggun.admin.service.UserService;
 
 import java.util.function.Supplier;
 @Configuration
 @EnableWebSecurity
 public class WebSecurity {
-    private UserService userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private Environment env;
     public static final String ALLOWED_IP_ADDRESS = "127.0.0.1";
@@ -64,6 +62,6 @@ protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return new AuthorizationDecision(ALLOWED_IP_ADDRESS_MATCHER.matches(object.getRequest()));
     }
     private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        return new AuthenticationFilter(authenticationManager, userService, env);
+        return new AuthenticationFilter(authenticationManager, env);
     }
 }

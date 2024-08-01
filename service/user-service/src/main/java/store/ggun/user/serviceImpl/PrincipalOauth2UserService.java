@@ -2,6 +2,7 @@ package store.ggun.user.serviceImpl;
 
 import store.ggun.user.config.OAuthCustomOAuth2User;
 import store.ggun.user.domain.UserModel;
+import store.ggun.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

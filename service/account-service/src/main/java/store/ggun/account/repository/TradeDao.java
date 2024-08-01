@@ -1,7 +1,7 @@
 package store.ggun.account.repository;
 
-import org.springframework.stereotype.Repository;
 import store.ggun.account.domain.model.TradeModel;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package store.ggun.user.service;
 
 
+import org.springframework.http.ResponseEntity;
 import store.ggun.user.domain.UserDto;
 import store.ggun.user.domain.TokenVo;
 import store.ggun.user.domain.UserModel;

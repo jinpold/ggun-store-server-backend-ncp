@@ -1,4 +1,5 @@
 package store.ggun.admin.filter;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,18 +10,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import store.ggun.admin.service.UserService;
 
 import java.io.IOException;
 
 @Slf4j
 public class AuthenticationFilter  extends UsernamePasswordAuthenticationFilter {
-    private UserService userService;
     private Environment environment;
     public AuthenticationFilter(AuthenticationManager authenticationManager,
-                                UserService userService, Environment environment) {
+//                                UserService userService,
+                                Environment environment) {
         super(authenticationManager);
-        this.userService = userService;
+//        this.userService = userService;
         this.environment = environment;
     }
     @Override

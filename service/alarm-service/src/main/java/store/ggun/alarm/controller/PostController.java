@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import store.ggun.alarm.domain.model.NotificationModel;
 import store.ggun.alarm.domain.model.PostModel;
-import store.ggun.alarm.serviceImpl.NotificationService;
+import store.ggun.alarm.service.NotificationService;
 import store.ggun.alarm.service.PostService;
 
 @Slf4j

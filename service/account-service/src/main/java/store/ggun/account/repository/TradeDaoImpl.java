@@ -1,10 +1,10 @@
 package store.ggun.account.repository;
 
+import store.ggun.account.domain.model.QTradeModel;
+import store.ggun.account.domain.model.TradeModel;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import store.ggun.account.domain.model.QTradeModel;
-import store.ggun.account.domain.model.TradeModel;
 
 import java.util.List;
 

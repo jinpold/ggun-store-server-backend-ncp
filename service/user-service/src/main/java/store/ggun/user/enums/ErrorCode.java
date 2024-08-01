@@ -2,6 +2,7 @@ package store.ggun.user.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.HttpStatusException;
 
 @RequiredArgsConstructor
 @Getter

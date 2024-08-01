@@ -1,15 +1,16 @@
 package store.ggun.alarm.config;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+
+import lombok.RequiredArgsConstructor;
 import store.ggun.alarm.domain.model.RoleModel;
 import store.ggun.alarm.domain.model.RoomModel;
 import store.ggun.alarm.domain.model.UserModel;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor

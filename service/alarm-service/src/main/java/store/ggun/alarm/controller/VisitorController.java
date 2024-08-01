@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import store.ggun.alarm.serviceImpl.VisitorService;
+import store.ggun.alarm.service.VisitorService;
 
 import java.util.Map;
 

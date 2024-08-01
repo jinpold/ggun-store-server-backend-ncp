@@ -1,5 +1,6 @@
 package store.ggun.user.config;
 
+import store.ggun.user.domain.Messenger;
 import store.ggun.user.domain.UserModel;
 import store.ggun.user.enums.TokenType;
 import store.ggun.user.repository.UserRepository;

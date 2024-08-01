@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import store.ggun.alarm.domain.model.NotificationModel;
-import store.ggun.alarm.serviceImpl.NotificationService;
+import store.ggun.alarm.service.NotificationService;
 
 
 @Slf4j

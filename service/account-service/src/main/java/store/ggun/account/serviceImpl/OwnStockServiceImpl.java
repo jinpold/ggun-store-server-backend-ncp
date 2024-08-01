@@ -1,9 +1,11 @@
 package store.ggun.account.serviceImpl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import store.ggun.account.domain.dto.AccountDto;
 import store.ggun.account.domain.dto.Messenger;
 import store.ggun.account.domain.dto.OwnStockDto;
@@ -12,6 +14,11 @@ import store.ggun.account.domain.model.AccountModel;
 import store.ggun.account.domain.model.OwnStockModel;
 import store.ggun.account.repository.AccountRepository;
 import store.ggun.account.repository.OwnStockRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import store.ggun.account.repository.TradeDao;
 import store.ggun.account.service.AccountService;
 import store.ggun.account.service.OwnStockService;
 import store.ggun.account.service.TradeService;

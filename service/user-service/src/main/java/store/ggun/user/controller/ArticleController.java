@@ -1,11 +1,15 @@
 package store.ggun.user.controller;
 
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.ggun.user.domain.ArticleDto;
 import store.ggun.user.domain.ArticleModel;
+import store.ggun.user.domain.Messenger;
+import store.ggun.user.repository.ArticleRepository;
 import store.ggun.user.service.ArticleService;
 
 import java.util.List;

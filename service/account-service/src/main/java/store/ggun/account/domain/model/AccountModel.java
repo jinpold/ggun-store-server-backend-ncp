@@ -1,6 +1,7 @@
 package store.ggun.account.domain.model;
 
 import jakarta.persistence.*;
+//import com.jsggun.account.trade.model.Trade;
 import lombok.*;
 
 import java.util.List;

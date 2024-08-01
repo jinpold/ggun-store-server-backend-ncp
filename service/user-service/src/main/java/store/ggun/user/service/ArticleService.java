@@ -1,7 +1,9 @@
 package store.ggun.user.service;
 
+import com.querydsl.core.Tuple;
 import store.ggun.user.domain.ArticleDto;
 import store.ggun.user.domain.ArticleModel;
+import store.ggun.user.domain.Messenger;
 
 import java.util.List;
 

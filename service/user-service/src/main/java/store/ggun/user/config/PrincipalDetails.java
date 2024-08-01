@@ -1,4 +1,4 @@
-package store.ggun.user.config;//package store.ggun.user.config;
+//package store.ggun.user.config;
 //
 //import store.ggun.user.domain.UserModel;
 //import lombok.Data;

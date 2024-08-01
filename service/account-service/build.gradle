@@ -17,7 +17,13 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+bootJar {
+    enabled = true
+}
 
+jar{
+    enabled = false
+}
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
@@ -74,6 +80,9 @@ dependencies {
 
     //eureka
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '4.1.2'
+
+    // config
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 
 }
