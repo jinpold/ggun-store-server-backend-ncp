@@ -34,7 +34,7 @@ public class AdminAuthController {
                 .password(dto.getPassword())
                 .build()));
     }
-    @GetMapping("/exists-username") //헤더 자리 params // 바디는  @RequestParam
+    @GetMapping("/exists-username")
     public ResponseEntity<Boolean> existsByUsername(@RequestParam("username") String username) {
         log.info("existsByUsername 파라미터 정보:"+username);
         log.info("existsByUsername 결과:" + username);
