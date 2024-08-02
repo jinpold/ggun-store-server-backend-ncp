@@ -44,7 +44,7 @@ services:
   gateway:
     hostname: gateway-server
     build:
-      context: ./server/api-gateway
+      context: ./server/gateway-server
       dockerfile: Dockerfile
     image: ggun/gateway:latest
     container_name: gateway

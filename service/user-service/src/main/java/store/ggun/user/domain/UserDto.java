@@ -1,15 +1,14 @@
 package store.ggun.user.domain;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class UserDto extends BaseEntity {
     private Long id;
