@@ -18,14 +18,14 @@ public class AdminDto {
     private Long id;
     private String username;
     private String password;
-    private String enpName; //사원 이름 Employee name 약어
-    private String enpNum; // 사원번호
-    private String department; // 부서
-    private String position; // 직책
-    private String job; // 직무
+    private String enpName;
+    private String enpNum;
+    private String department;
+    private String position;
+    private String job;
     private String enpEmail;
     private String phone;
-    private String role; // 권한
+    private String role;
     private String token;
     private List<ArticleModel> articleModels;
 

@@ -7,7 +7,7 @@ import store.ggun.alarm.domain.model.UserModel;
 
 
 @Repository
-public interface UserRepository extends ReactiveMongoRepository<UserModel, Long> {
+public interface UserRepository extends ReactiveMongoRepository<UserModel, String> {
     Flux<UserModel> findByLastName(String lastName);
     Flux<UserModel> findAll();
     Mono<UserModel> findByEmail(String email);

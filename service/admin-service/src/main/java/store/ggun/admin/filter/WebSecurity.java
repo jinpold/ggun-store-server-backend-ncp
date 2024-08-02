@@ -26,11 +26,6 @@ public class WebSecurity {
     public static final String SUBNET = "/32";
     public static final IpAddressMatcher ALLOWED_IP_ADDRESS_MATCHER = new IpAddressMatcher(ALLOWED_IP_ADDRESS + SUBNET);
 
-//    public WebSecurity(Environment env, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-//        this.env = env;
-//        this.userService = userService;
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-//    }
 @Bean
 protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
     // Configure AuthenticationManagerBuilder

@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 public class UserDto {
     private String Id;
     private String lastName;
-    // private String password; 프론트로 보내는 값은 비번을 지운다
+    private String password;
     private String firstName;
     private String email;
-    // private List<RoleModel> roles;
 }

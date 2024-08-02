@@ -118,7 +118,6 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.count();
     }
 
-    // SRP에 따라 아이디 존재여부를 프론트에서 먼저 판단하고, 넘어옴 (시큐리티)
     @Transactional
     @Override
     public Messenger login(AdminDto dto) {

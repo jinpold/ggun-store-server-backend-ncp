@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "chats")
 public class ChatModel {
     @Id
-    private Long id;
+    private String id;
     private String roomId;
     private String senderId;
     private String senderName;

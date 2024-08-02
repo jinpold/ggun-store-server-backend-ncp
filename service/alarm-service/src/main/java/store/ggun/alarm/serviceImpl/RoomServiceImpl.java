@@ -87,7 +87,7 @@ public class RoomServiceImpl implements RoomService {
     public Mono<RoomModel> update(RoomDto dto) {
         return roomRepository.existsById(dto.getId())
                 .flatMap(exists -> roomRepository.save(RoomModel.builder()
-                        .id(Long.valueOf(dto.getId()))
+                        .id(dto.getId())
                         .title(dto.getTitle())
                         .members(dto.getMembers())
                         .build()));

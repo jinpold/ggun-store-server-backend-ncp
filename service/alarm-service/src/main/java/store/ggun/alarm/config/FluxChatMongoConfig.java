@@ -41,7 +41,7 @@ public class FluxChatMongoConfig {
                         UserModel user = users.get(0);
                         return mongoTemplate.insert(
                                 RoomModel.builder()
-                                        .id(1L)
+                                        .id("1")
                                         .title("test room")
                                         .members(List.of(String.valueOf(user.getId())))
                                         .build()

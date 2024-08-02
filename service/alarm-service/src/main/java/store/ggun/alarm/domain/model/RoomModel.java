@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "rooms")
 public class RoomModel {
     @Id
-    private Long id;
+    private String id;
     private String title;
     private List<String> members;
 }

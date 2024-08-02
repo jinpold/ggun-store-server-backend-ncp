@@ -4,12 +4,9 @@ import store.ggun.admin.service.UtilService;
 
 public class UtilServiceImpl implements UtilService {
 
-    // 싱글톤 패턴 시작
-
     private static UtilService instance = new UtilServiceImpl();
 
     private UtilServiceImpl() {
-
     }
 
     public static UtilService getInstance() {
@@ -19,7 +16,6 @@ public class UtilServiceImpl implements UtilService {
 
     @Override
     public int createRandomInteger(int start, int gapBetweenStartAndEnd) {
-        // 0이상 50만의 값을 생성하고 150을 더해줌으로써 키의 범위를 150이상 200미만으로 만듦
         return start + (int) (Math.random() * gapBetweenStartAndEnd);
     }
 
@@ -67,10 +63,6 @@ public class UtilServiceImpl implements UtilService {
         return names[createRandomInteger(0,6)];
     }
 
-//    public String createRandomProduct() {
-//        String[] names = {};
-//        return names[createRandomInteger(0,6)];
-//    }
 
     @Override
     public String createRandomCompany() {
@@ -87,21 +79,7 @@ public class UtilServiceImpl implements UtilService {
                                                  // -------------> for문  username.length() => i 인덱스이다.
         return username;
     }
-
-
 }
-//        String[] character= {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-//                "l", "m", "n", "o", "p", "q", "r" ,"s", "t", "u", "v", "w" ,"x" ,"y", "z"};
-//        String usermame = "";
-//        for (int i = 0; i < 5; i++) {
-//
-//            character[i] = character[createRandomInteger(0,26)];
-//            usermame += character[i];
-//
-//        } return usermame;
-//    }
-//}
-
 
 
 
