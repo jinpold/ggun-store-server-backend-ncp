@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Log4j2
-public class EmailDTO {
+public class EmailDto {
 
     private Long id;
     private String enpEmail;

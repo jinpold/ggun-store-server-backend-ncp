@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Log4j2
-public class AdminDTO {
+public class AdminDto {
     private Long id;
     private String username;
     private String password;
