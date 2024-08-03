@@ -1,5 +1,4 @@
 package store.ggun.user.exception;
-
 import store.ggun.user.config.TokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
