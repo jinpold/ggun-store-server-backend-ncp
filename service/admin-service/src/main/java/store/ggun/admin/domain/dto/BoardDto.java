@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Log4j2
-public class BoardDto {
+public class BoardDTO {
     private Long id;
     private String title;
     private String content;

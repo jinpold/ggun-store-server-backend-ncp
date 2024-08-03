@@ -1,6 +1,5 @@
 package store.ggun.gateway.config;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.config.CorsRegistry;
@@ -13,10 +12,9 @@ public class WebFluxConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("http://localhost:3000", "http://*.ggun.store")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true)
-        ;
+                .allowCredentials(true);
     }
 }
