@@ -120,22 +120,35 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public Messenger login(AdminDto dto) {
-        log.info("로그인 서비스로 들어온 파라미터 : " +dto);
-        AdminModel adminModel = adminRepository.findAdminByUsername((dto.getUsername())).get();
-        String accessToken = jwtProvider.createToken(entityToDto(adminModel));
-
-        boolean flag = adminModel.getPassword().equals(dto.getPassword());
-        log.info("accessToken 확인용: "+accessToken);
-        adminRepository.modifyTokenById(adminModel.getId(), accessToken);
-        // 토큰을 각 섹션 (Header, payload, signature)으로 분할
-
-        jwtProvider.printPayload(accessToken);
-        return Messenger.builder()
-                .message(flag ? "SUCCESS" : "FAILURE")
-                .accessToken(flag ? accessToken : "NONE")
-                .build();
+    public Messenger login(AdminDto adminDto) {
+        log.info("login 진입 성공 email: {}", adminDto.getEmail());
+        Optional<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(adminDto.getEmail());
+        if (optionalAdminModel.isPresent()) {
+            AdminModel adminModel = optionalAdminModel.get();
+            boolean flag = adminModel.getPassword().equals(adminDto.getPassword());
+            return Messenger.builder()
+                    .message(flag ? "SUCCESS" : "FAILURE")
+                    .build();
+        } else {
+            return Messenger.builder()
+                    .message("User does not exist.")
+                    .build();
+        }
     }
+//        log.info("로그인 서비스로 들어온 파라미터 : " +dto);
+//        AdminModel adminModel = adminRepository.findAdminByUsername((dto.getUsername())).get();
+//        String accessToken = jwtProvider.createToken(entityToDto(adminModel));
+//
+//        boolean flag = adminModel.getPassword().equals(dto.getPassword());
+//        log.info("accessToken 확인용: "+accessToken);
+//        adminRepository.modifyTokenById(adminModel.getId(), accessToken);
+//        // 토큰을 각 섹션 (Header, payload, signature)으로 분할
+//
+//        jwtProvider.printPayload(accessToken);
+//        return Messenger.builder()
+//                .message(flag ? "SUCCESS" : "FAILURE")
+//                .accessToken(flag ? accessToken : "NONE")
+//                .build();
 
     @Override
     public Boolean existsByUsername(String username) {
