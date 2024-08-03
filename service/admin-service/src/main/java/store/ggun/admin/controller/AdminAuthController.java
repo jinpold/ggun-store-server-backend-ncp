@@ -13,7 +13,6 @@ import store.ggun.admin.service.AdminService;
 import store.ggun.admin.service.LoginService;
 
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController("adminAuthController")
 @RequiredArgsConstructor
 @ApiResponses(value = {

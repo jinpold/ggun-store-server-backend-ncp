@@ -14,7 +14,6 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequiredArgsConstructor
 @ApiResponses(value = {
