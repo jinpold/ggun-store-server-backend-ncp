@@ -1,13 +1,13 @@
 package store.ggun.admin.service;
 import store.ggun.admin.domain.model.BoardModel;
-import store.ggun.admin.domain.dto.BoardDto;
+import store.ggun.admin.domain.dto.BoardDTO;
 
-public interface BoardService extends CommandService<BoardDto>, QueryService<BoardDto> {
-
-
+public interface BoardService extends CommandService<BoardDTO>, QueryService<BoardDTO> {
 
 
-    default BoardModel dtoToEntity(BoardDto dto){
+
+
+    default BoardModel dtoToEntity(BoardDTO dto){
 
         return BoardModel.builder()
                 .id(dto.getId())
@@ -16,9 +16,9 @@ public interface BoardService extends CommandService<BoardDto>, QueryService<Boa
                 .build();
     }
 
-    default BoardDto entityToDto(BoardModel ent){
+    default BoardDTO entityToDto(BoardModel ent){
 
-        return BoardDto.builder()
+        return BoardDTO.builder()
                 .id(ent.getId())
                 .title(ent.getTitle())
                 .description(ent.getDescription())

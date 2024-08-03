@@ -1,23 +1,26 @@
 package store.ggun.admin.service;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.AdminModel;
-import store.ggun.admin.domain.dto.AdminDto;
+import store.ggun.admin.domain.dto.AdminDTO;
 import java.util.Optional;
 
-public interface AdminService extends CommandService<AdminDto>, QueryService<AdminDto> {
+public interface AdminService extends CommandService<AdminDTO>, QueryService<AdminDTO> {
     // command
-    Messenger modify(AdminDto adminDto);
-    Messenger modifyRole(AdminDto adminDto);
-    Messenger update(AdminDto adminDto);
+    Messenger modify(AdminDTO adminDto);
+    Messenger modifyRole(AdminDTO adminDto);
+    Messenger update(AdminDTO adminDto);
     // query
-    Messenger login(AdminDto param);
+    Messenger login(AdminDTO adminDTO);
     Boolean existsByUsername(String username);
+    boolean findAdminByEmail(String email);
     Optional<AdminModel> findAdminByRole(String role);
     Optional<AdminModel> findAdminByUsername(String enpName);
     Boolean logout(String accessToken);
-    Optional<AdminDto> findUserInfo(String username);
+    Optional<AdminDTO> findUserInfo(String username);
 
-    default AdminModel dtoToEntity(AdminDto dto){
+
+
+    default AdminModel dtoToEntity(AdminDTO dto){
         return AdminModel.builder()
                 .id(dto.getId())
                 .username(dto.getUsername())
@@ -27,7 +30,7 @@ public interface AdminService extends CommandService<AdminDto>, QueryService<Adm
                 .department(dto.getDepartment())
                 .position(dto.getPosition())
                 .job(dto.getJob())
-                .enpEmail(dto.getEnpEmail())
+                .email(dto.getEmail())
                 .phone(dto.getPhone())
                 .role(dto.getRole())
                 .token(dto.getToken())
@@ -35,8 +38,8 @@ public interface AdminService extends CommandService<AdminDto>, QueryService<Adm
     }
 
 
-    default AdminDto entityToDto(AdminModel ent) {
-        return AdminDto.builder()
+    default AdminDTO entityToDto(AdminModel ent) {
+        return AdminDTO.builder()
                 .id(ent.getId())
                 .username(ent.getUsername())
                 .password(ent.getPassword())
@@ -45,7 +48,7 @@ public interface AdminService extends CommandService<AdminDto>, QueryService<Adm
                 .department(ent.getDepartment())
                 .position(ent.getPosition())
                 .job(ent.getJob())
-                .enpEmail(ent.getEnpEmail())
+                .email(ent.getEmail())
                 .phone(ent.getPhone())
                 .role(ent.getRole())
                 .token(ent.getToken())

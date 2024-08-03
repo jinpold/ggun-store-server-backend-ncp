@@ -1,5 +1,6 @@
 package store.ggun.admin.domain.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.util.List;
 
@@ -20,15 +21,18 @@ public class AdminModel extends BaseEntity {
     private String password;
     @Column(name = "enp_name")
     private String enpName;
+    @Column(name = "enp_num")
     private String enpNum;
     private String department;
     private String position;
     private String job;
-    @Column(name = "enp_email")
-    private String enpEmail;
+    @NotNull
+    private String email;
     private String phone;
     private String role;
     private String token;
+    @NotNull
+    private String profile;
 
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

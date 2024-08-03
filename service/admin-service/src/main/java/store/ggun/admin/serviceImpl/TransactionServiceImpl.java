@@ -1,7 +1,7 @@
 package store.ggun.admin.serviceImpl;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.TransactionModel;
-import store.ggun.admin.domain.dto.TransactionDto;
+import store.ggun.admin.domain.dto.TransactionDTO;
 import store.ggun.admin.repository.jpa.TransactionRepository;
 import store.ggun.admin.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
 
     @Override
-    public Messenger save(TransactionDto transactionDto) {
+    public Messenger save(TransactionDTO transactionDto) {
         TransactionModel transactionModel = transactionRepository.save(dtoToEntity(transactionDto));
         System.out.println((transactionModel instanceof TransactionModel) ? "SUCCESS" : "FAILURE");
         return Messenger.builder()
@@ -35,17 +35,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Messenger modify(TransactionDto transactionDto) {
+    public Messenger modify(TransactionDTO transactionDto) {
         return null;
     }
 
     @Override
-    public List<TransactionDto> findAll() throws SQLException {
+    public List<TransactionDTO> findAll() throws SQLException {
         return transactionRepository.getAllTransactions().stream().toList();
     }
 
     @Override
-    public Optional<TransactionDto> findById(Long id) {
+    public Optional<TransactionDTO> findById(Long id) {
         return transactionRepository.findById(id).stream().map(i -> entityToDto(i)).findAny();
     }
 

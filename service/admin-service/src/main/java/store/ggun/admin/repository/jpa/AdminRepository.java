@@ -11,8 +11,11 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends JpaRepository<AdminModel, Long> {
     Optional<AdminModel> findAdminByUsername(String enpName);
+    Optional<AdminModel> findAdminByEmail(String email);
     Optional<AdminModel> findAdminByRole(String Role);
-    Optional<AdminModel> findByToken(String token);
+
+    @Query("select count(id) as count from admins where email =:email")
+    Integer existsByEmail(@Param("email") String username);
 
     @Query("select count(id) as count from admins where username = :username ")
     Integer existsByUsername(@Param("username") String username); //boolean 타입은 쿼리매소드 작성불가 => count로 대체

@@ -1,0 +1,38 @@
+package store.ggun.admin.serviceImpl;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import store.ggun.admin.domain.dto.LoginDTO;
+import store.ggun.admin.domain.model.AdminModel;
+import store.ggun.admin.domain.model.Messenger;
+import store.ggun.admin.repository.jpa.AdminRepository;
+import store.ggun.admin.service.LoginService;
+
+import java.util.Optional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class LoginServiceImpl implements LoginService {
+    private final AdminRepository adminRepository;
+
+    @Override
+    public Messenger login(LoginDTO admin) {
+        log.info("login 진입 성공 email: {}", admin.getEmail());
+        Optional<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(admin.getEmail());
+        if (optionalAdminModel.isPresent()) {
+            AdminModel adminModel = optionalAdminModel.get();
+            boolean flag = adminModel.getPassword().equals(admin.getPassword());
+            return Messenger.builder()
+                    .message(flag ? "SUCCESS" : "FAILURE")
+                    .build();
+        } else {
+            return Messenger.builder()
+                    .message("User does not exist.")
+                    .build();
+        }
+    }
+
+
+}

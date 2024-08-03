@@ -6,10 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import store.ggun.admin.domain.dto.AdminDto;
+import store.ggun.admin.domain.dto.AdminDTO;
+import store.ggun.admin.domain.dto.LoginDTO;
 import store.ggun.admin.domain.model.Messenger;
-import store.ggun.admin.repository.jpa.AdminRepository;
 import store.ggun.admin.service.AdminService;
+import store.ggun.admin.service.LoginService;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -21,23 +22,20 @@ import store.ggun.admin.service.AdminService;
 @RequestMapping(path = "/auth")
 @Slf4j
 public class AdminAuthController {
-    private final AdminService service;
-    private final AdminRepository adminRepository;
+    private final LoginService service;
 
     // -----------------------------------Query ---------------------------------------
 
     @PostMapping(path = "/login")
-    public ResponseEntity<Messenger> login(@RequestBody AdminDto dto) {
+    public ResponseEntity<Messenger> login(@RequestBody LoginDTO dto) {
         log.info("입력받은 정보 : {}", dto);
-        return ResponseEntity.ok(service.login(AdminDto.builder()
-                .username(dto.getUsername())
-                .password(dto.getPassword())
-                .build()));
+        Messenger messenger = service.login(dto);
+        return ResponseEntity.ok(messenger);
     }
-    @GetMapping("/exists-username")
-    public ResponseEntity<Boolean> existsByUsername(@RequestParam("username") String username) {
-        log.info("existsByUsername 파라미터 정보:"+username);
-        log.info("existsByUsername 결과:" + username);
-        return ResponseEntity.ok(service.existsByUsername(username));
-    }
+//    @GetMapping("/exists-username")
+//    public ResponseEntity<Boolean> existsByUsername(@RequestParam("username") String username) {
+//        log.info("existsByUsername 파라미터 정보:"+username);
+//        log.info("existsByUsername 결과:" + username);
+//        return ResponseEntity.ok(service.existsByUsername(username));
+//    }
 }

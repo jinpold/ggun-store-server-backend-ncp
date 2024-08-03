@@ -3,7 +3,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import store.ggun.admin.domain.dto.BoardDto;
+import store.ggun.admin.domain.dto.BoardDTO;
 import store.ggun.admin.serviceImpl.BoardServiceImpl;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.pagination.PageRequestVo;
@@ -29,22 +29,22 @@ public class BoardController {
 
     @SuppressWarnings("static-access")
     @PostMapping( "/save")
-    public ResponseEntity<Messenger> save(@RequestBody BoardDto dto) {
+    public ResponseEntity<Messenger> save(@RequestBody BoardDTO dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.save(dto));
     }
     @GetMapping("/list") //all-users
-    public ResponseEntity<List<BoardDto>> findAll() throws SQLException {
+    public ResponseEntity<List<BoardDTO>> findAll() throws SQLException {
         log.info("입력받은 정보 : {}" );
         return ResponseEntity.ok(service.findAll());
     }
     @GetMapping("/detail")
-    public ResponseEntity<BoardDto> findById(@RequestParam("id") Long id) {
+    public ResponseEntity<BoardDTO> findById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
-        return ResponseEntity.ok(service.findById(id).orElseGet(BoardDto::new));
+        return ResponseEntity.ok(service.findById(id).orElseGet(BoardDTO::new));
     }
     @PutMapping ("/modify")
-    public ResponseEntity<Messenger> modify(@RequestBody BoardDto dto) {
+    public ResponseEntity<Messenger> modify(@RequestBody BoardDTO dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.modify(dto));
     }

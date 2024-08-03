@@ -2,7 +2,7 @@ package store.ggun.admin.serviceImpl;
 import store.ggun.admin.security.JwtProvider;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.AdminModel;
-import store.ggun.admin.domain.dto.AdminDto;
+import store.ggun.admin.domain.dto.AdminDTO;
 import store.ggun.admin.repository.jpa.AdminRepository;
 import store.ggun.admin.service.AdminService;
 import jakarta.transaction.Transactional;
@@ -23,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public Messenger save(AdminDto adminDto) {
+    public Messenger save(AdminDTO adminDto) {
         AdminModel ent = adminRepository.save(dtoToEntity(adminDto));
         System.out.println((ent instanceof AdminModel) ? "SUCCESS" : "FAILURE");
         return Messenger.builder()
@@ -31,24 +31,24 @@ public class AdminServiceImpl implements AdminService {
                 .build();
     }
     @Override
-    public List<AdminDto> findAll() {
+    public List<AdminDTO> findAll() {
         return adminRepository.findAll().stream().map(i->entityToDto(i)).toList();
     }
     @Override
-    public Optional<AdminDto> findById(Long id) {
+    public Optional<AdminDTO> findById(Long id) {
         return adminRepository.findById(id).stream().map(i -> entityToDto(i)).findAny();
     }
 
     @Transactional
     @Override
-    public Messenger modify(AdminDto adminDto) {
+    public Messenger modify(AdminDTO adminDto) {
         AdminModel adminModel = adminRepository.findById(adminDto.getId()).get();
         if (adminDto.getUsername() != null && !adminDto.getUsername().equals("")) {
             adminModel.setUsername(adminDto.getUsername());
         }
         adminModel.setUsername(adminDto.getUsername());
         adminModel.setPassword(adminDto.getPassword());
-        adminModel.setEnpEmail(adminDto.getEnpEmail());
+        adminModel.setEmail(adminDto.getEmail());
         adminModel.setEnpName(adminDto.getEnpName());
         adminModel.setEnpNum(adminDto.getEnpNum());
         adminModel.setPhone(adminDto.getPhone());
@@ -65,7 +65,7 @@ public class AdminServiceImpl implements AdminService {
     }
     @Transactional
     @Override
-    public Messenger modifyRole(AdminDto adminDto) {
+    public Messenger modifyRole(AdminDTO adminDto) {
         AdminModel adminModel = adminRepository.findById(adminDto.getId()).get();
         if (adminDto.getUsername() != null && !adminDto.getUsername().equals("")) {
             adminModel.setUsername(adminDto.getUsername());
@@ -80,7 +80,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public Messenger update(AdminDto adminDto) {
+    public Messenger update(AdminDTO adminDto) {
         AdminModel adminModel = adminRepository.findById(adminDto.getId())
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
         // 비밀번호를 사원번호로 변경
@@ -120,7 +120,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public Messenger login(AdminDto dto) {
+    public Messenger login(AdminDTO dto) {
         log.info("로그인 서비스로 들어온 파라미터 : " +dto);
         AdminModel adminModel = adminRepository.findAdminByUsername((dto.getUsername())).get();
         String accessToken = jwtProvider.createToken(entityToDto(adminModel));
@@ -141,6 +141,12 @@ public class AdminServiceImpl implements AdminService {
     public Boolean existsByUsername(String username) {
         Integer count  = adminRepository.existsByUsername(username);
         return count ==1;
+    }
+
+    @Override
+    public boolean findAdminByEmail(String email) {
+        Integer count = adminRepository.existsByEmail(email);
+        return count == 1;
     }
 
     @Override
@@ -165,7 +171,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Optional<AdminDto> findUserInfo(String accessToken) {
+    public Optional<AdminDTO> findUserInfo(String accessToken) {
         String splitToken = accessToken.substring(7);
         Long id = jwtProvider.getPayload(splitToken).get("id", Long.class);
 

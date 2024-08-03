@@ -14,12 +14,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Log4j2
-public class BoardDto {
+public class AdminDTO {
     private Long id;
-    private String title;
-    private String content;
-    private String description;
-    private String regDate;
-    private String modDate;
-    private List<ArticleModel> articleModel;
+    private String username;
+    private String password;
+    private String enpName;
+    private String enpNum;
+    private String department;
+    private String position;
+    private String job;
+    private String email;
+    private String phone;
+    private String role;
+    private String token;
+    private List<ArticleModel> articleModels;
+
 }

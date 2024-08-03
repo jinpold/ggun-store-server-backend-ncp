@@ -1,6 +1,6 @@
 package store.ggun.admin.controller;
 import store.ggun.admin.domain.model.Messenger;
-import store.ggun.admin.domain.dto.TransactionDto;
+import store.ggun.admin.domain.dto.TransactionDTO;
 import store.ggun.admin.serviceImpl.TransactionServiceImpl;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,13 +28,13 @@ public class TransactionController {
 
     @SuppressWarnings("static-access")
     @PostMapping( "/save")
-    public ResponseEntity<Messenger> save(@RequestBody TransactionDto dto) {
+    public ResponseEntity<Messenger> save(@RequestBody TransactionDTO dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.save(dto));
 
     }
     @GetMapping("/list")
-    public ResponseEntity<List<TransactionDto>> findTransactionsById() throws SQLException {
+    public ResponseEntity<List<TransactionDTO>> findTransactionsById() throws SQLException {
         System.out.println(service.findAll());
         return ResponseEntity.ok(service.findAll());
     }

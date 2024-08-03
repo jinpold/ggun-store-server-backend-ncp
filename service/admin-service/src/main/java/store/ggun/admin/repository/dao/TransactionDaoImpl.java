@@ -1,7 +1,7 @@
 package store.ggun.admin.repository.dao;
 
 import store.ggun.admin.domain.dto.QTransactionDto;
-import store.ggun.admin.domain.dto.TransactionDto;
+import store.ggun.admin.domain.dto.TransactionDTO;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,7 +29,7 @@ public class TransactionDaoImpl implements TransactionDao {
                 .fetchFirst();
     }
     @Override
-    public List<TransactionDto> getAllTransactions() {
+    public List<TransactionDTO> getAllTransactions() {
         return jpaQueryFactory.select(
                         new QTransactionDto(
                                 transaction.id,
@@ -116,7 +116,7 @@ public class TransactionDaoImpl implements TransactionDao {
 
 
     @Override
-    public List<TransactionDto> getTransactionsByNetProfit() {
+    public List<TransactionDTO> getTransactionsByNetProfit() {
         return List.of();
     }
 
