@@ -1,26 +1,26 @@
 package store.ggun.admin.service;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.AdminModel;
-import store.ggun.admin.domain.dto.AdminDTO;
+import store.ggun.admin.domain.dto.AdminDto;
 import java.util.Optional;
 
-public interface AdminService extends CommandService<AdminDTO>, QueryService<AdminDTO> {
+public interface AdminService extends CommandService<AdminDto>, QueryService<AdminDto> {
     // command
-    Messenger modify(AdminDTO adminDto);
-    Messenger modifyRole(AdminDTO adminDto);
-    Messenger update(AdminDTO adminDto);
+    Messenger modify(AdminDto adminDto);
+    Messenger modifyRole(AdminDto adminDto);
+    Messenger update(AdminDto adminDto);
     // query
-    Messenger login(AdminDTO adminDTO);
+    Messenger login(AdminDto adminDTO);
     Boolean existsByUsername(String username);
     boolean findAdminByEmail(String email);
     Optional<AdminModel> findAdminByRole(String role);
     Optional<AdminModel> findAdminByUsername(String enpName);
     Boolean logout(String accessToken);
-    Optional<AdminDTO> findUserInfo(String username);
+    Optional<AdminDto> findUserInfo(String username);
 
 
 
-    default AdminModel dtoToEntity(AdminDTO dto){
+    default AdminModel dtoToEntity(AdminDto dto){
         return AdminModel.builder()
                 .id(dto.getId())
                 .username(dto.getUsername())
@@ -38,8 +38,8 @@ public interface AdminService extends CommandService<AdminDTO>, QueryService<Adm
     }
 
 
-    default AdminDTO entityToDto(AdminModel ent) {
-        return AdminDTO.builder()
+    default AdminDto entityToDto(AdminModel ent) {
+        return AdminDto.builder()
                 .id(ent.getId())
                 .username(ent.getUsername())
                 .password(ent.getPassword())

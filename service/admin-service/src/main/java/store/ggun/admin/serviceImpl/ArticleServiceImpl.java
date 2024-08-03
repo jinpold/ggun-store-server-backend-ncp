@@ -1,6 +1,6 @@
 package store.ggun.admin.serviceImpl;
 import store.ggun.admin.domain.model.ArticleModel;
-import store.ggun.admin.domain.dto.ArticleDTO;
+import store.ggun.admin.domain.dto.ArticleDto;
 import store.ggun.admin.repository.jpa.ArticleRepository;
 import store.ggun.admin.domain.model.BoardModel;
 import store.ggun.admin.repository.jpa.BoardRepository;
@@ -24,7 +24,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Transactional
     @Override
-    public Messenger save(ArticleDTO articleDto) {
+    public Messenger save(ArticleDto articleDto) {
         BoardModel boardModel = boardRepository.findById(articleDto.getBoardId()).orElseThrow();
         AdminModel adminModel = adminRepository.findById(articleDto.getWriterId()).orElseThrow();
         ArticleModel articleModel = articleRepository.save(dtoToEntity(articleDto, boardModel, adminModel));
@@ -45,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     @Transactional
     @Override
-    public Messenger modify(ArticleDTO articleDto) {
+    public Messenger modify(ArticleDto articleDto) {
         Optional<ArticleModel> article = articleRepository.findById(articleDto.getId());
 
         if (article.isEmpty()) {
@@ -69,11 +69,11 @@ public class ArticleServiceImpl implements ArticleService {
 //                .build();
 
     @Override
-    public List<ArticleDTO> findAll() throws SQLException {
+    public List<ArticleDto> findAll() throws SQLException {
         return articleRepository.findAll().stream().map(i -> entityToDto(i)).toList();
     }
     @Override
-    public Optional<ArticleDTO> findById(Long id) {
+    public Optional<ArticleDto> findById(Long id) {
         return articleRepository.findById(id).stream().map(i -> entityToDto(i)).findAny();
     }
     @Override
@@ -85,7 +85,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.existsById(id);
     }
     @Override
-    public List<ArticleDTO> getArticleByBoardId(Long boardId) {
+    public List<ArticleDto> getArticleByBoardId(Long boardId) {
         return articleRepository.getArticleByBoardId(boardId)
                 .stream().map(i -> entityToDto(i))
                 .toList();

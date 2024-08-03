@@ -1,15 +1,15 @@
 package store.ggun.admin.service;
 import store.ggun.admin.domain.model.ArticleModel;
-import store.ggun.admin.domain.dto.ArticleDTO;
+import store.ggun.admin.domain.dto.ArticleDto;
 import store.ggun.admin.domain.model.BoardModel;
 import store.ggun.admin.domain.model.AdminModel;
 import java.util.*;
 
-public interface ArticleService extends CommandService<ArticleDTO>, QueryService<ArticleDTO> {
+public interface ArticleService extends CommandService<ArticleDto>, QueryService<ArticleDto> {
 
-    List<ArticleDTO> getArticleByBoardId(Long id);
+    List<ArticleDto> getArticleByBoardId(Long id);
 
-    default ArticleModel dtoToEntity(ArticleDTO dto, BoardModel boardModel, AdminModel adminModel) {
+    default ArticleModel dtoToEntity(ArticleDto dto, BoardModel boardModel, AdminModel adminModel) {
         return ArticleModel.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
@@ -20,9 +20,9 @@ public interface ArticleService extends CommandService<ArticleDTO>, QueryService
 //                .board(boardRepository.findById(dto.getBoardId()).orElse(null))
                 .build();
     }
-    default ArticleDTO entityToDto(ArticleModel ent) {
+    default ArticleDto entityToDto(ArticleModel ent) {
 
-        return ArticleDTO.builder()
+        return ArticleDto.builder()
                 .id(ent.getId())
                 .title(ent.getTitle())
                 .content(ent.getContent())

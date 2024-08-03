@@ -6,7 +6,7 @@ import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.service.BoardService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import store.ggun.admin.domain.dto.BoardDTO;
+import store.ggun.admin.domain.dto.BoardDto;
 import store.ggun.admin.repository.jpa.BoardRepository;
 
 
@@ -19,7 +19,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository repository;
 
     @Override
-    public Messenger save(BoardDTO t) {
+    public Messenger save(BoardDto t) {
         repository.save(dtoToEntity(t));
         return Messenger.builder()
                 .message("성공")
@@ -27,16 +27,16 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
     @Override
-    public List<BoardDTO> findAll() throws SQLException {
+    public List<BoardDto> findAll() throws SQLException {
         return repository.findAll().stream().map(i->entityToDto(i)).toList();
     }
     @Override
-    public Optional<BoardDTO> findById(Long id) {
+    public Optional<BoardDto> findById(Long id) {
         return repository.findById(id).stream().map(i -> entityToDto(i)).findAny();
     }
     @Transactional
     @Override
-    public Messenger modify(BoardDTO boardDto) {
+    public Messenger modify(BoardDto boardDto) {
         repository.save(dtoToEntity(boardDto));
         return Messenger.builder()
                 .message("성공")

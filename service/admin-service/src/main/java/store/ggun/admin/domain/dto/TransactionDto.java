@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Builder
 @NoArgsConstructor
 @Log4j2
-public class TransactionDTO {
+public class TransactionDto {
 
     private Long id;
     private String username;
@@ -36,7 +36,7 @@ public class TransactionDTO {
 
 
     @QueryProjection
-    public TransactionDTO(Long id, String username, String buyStock,
+    public TransactionDto(Long id, String username, String buyStock,
                           String buyQuantity, String buyTotal, String sellStock,
                           String sellQuantity, String sellTotal, String tradeDate,
                           String closingPrice, String netProfit, String purchaseFee,

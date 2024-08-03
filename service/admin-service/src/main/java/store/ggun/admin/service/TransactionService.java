@@ -1,11 +1,11 @@
 package store.ggun.admin.service;
+import store.ggun.admin.domain.dto.TransactionDto;
 import store.ggun.admin.domain.model.TransactionModel;
-import store.ggun.admin.domain.dto.TransactionDTO;
 
 import java.util.Map;
 
 
-public interface TransactionService extends CommandService<TransactionDTO>, QueryService<TransactionDTO> {
+public interface TransactionService extends CommandService<TransactionDto>, QueryService<TransactionDto> {
 
     Map<String, Double> getNetProfitByDate();
 
@@ -13,7 +13,7 @@ public interface TransactionService extends CommandService<TransactionDTO>, Quer
 
     Map<String, Map<String, Integer>> getQuantityByDate();
 
-    default TransactionModel dtoToEntity(TransactionDTO dto){
+    default TransactionModel dtoToEntity(TransactionDto dto){
         return TransactionModel.builder()
                 .id(dto.getId())
                 .username(dto.getUsername())
@@ -38,8 +38,8 @@ public interface TransactionService extends CommandService<TransactionDTO>, Quer
                 .build();
     }
 
-    default TransactionDTO entityToDto(TransactionModel ent) {
-        return TransactionDTO.builder()
+    default TransactionDto entityToDto(TransactionModel ent) {
+        return TransactionDto.builder()
                 .id(ent.getId())
                 .username(ent.getUsername())
                 .buyStock(ent.getBuyStock())

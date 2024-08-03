@@ -1,7 +1,7 @@
 package store.ggun.admin.controller;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.AdminModel;
-import store.ggun.admin.domain.dto.AdminDTO;
+import store.ggun.admin.domain.dto.AdminDto;
 import store.ggun.admin.repository.jpa.AdminRepository;
 import store.ggun.admin.service.AdminService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,38 +29,38 @@ public class AdminController {
     // ---------------------------------Command---------------------------------------
     @SuppressWarnings("static-access")
     @PostMapping( "/save")
-    public ResponseEntity<Messenger> save(@RequestBody AdminDTO dto) {
+    public ResponseEntity<Messenger> save(@RequestBody AdminDto dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.save(dto));
 
     }
     @PatchMapping ("/modify") // 회원 정보변경
-    public ResponseEntity<Messenger> modify(@RequestBody AdminDTO dto) {
+    public ResponseEntity<Messenger> modify(@RequestBody AdminDto dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.modify(dto));
     }
     @PatchMapping ("/modifyRole") // 회원 정보변경
-    public ResponseEntity<Messenger> modifyRole(@RequestBody AdminDTO dto) {
+    public ResponseEntity<Messenger> modifyRole(@RequestBody AdminDto dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.modify(dto));
     }
     @PatchMapping("/update") // 비밀번호 초기화
-    public ResponseEntity<Messenger> update(@RequestBody AdminDTO dto) {
+    public ResponseEntity<Messenger> update(@RequestBody AdminDto dto) {
         log.info("입력받은 정보 : {}", dto);
         return ResponseEntity.ok(service.update(dto));
     }
     // -----------------------------------Query ---------------------------------------
 
     @GetMapping("/list")
-    public ResponseEntity<List<AdminDTO>> findAll() throws SQLException {
+    public ResponseEntity<List<AdminDto>> findAll() throws SQLException {
         log.info("입력받은 정보 : {}");
         System.out.println(service.findAll());
         return ResponseEntity.ok(service.findAll());
     }
     @GetMapping("/detail")
-    public ResponseEntity<AdminDTO> findById(@RequestParam("id") Long id) {
+    public ResponseEntity<AdminDto> findById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
-        return ResponseEntity.ok(service.findById(id).orElseGet(AdminDTO::new));
+        return ResponseEntity.ok(service.findById(id).orElseGet(AdminDto::new));
     }
     @DeleteMapping("/delete")
     public ResponseEntity<Messenger> deleteById(@RequestParam("id") Long id) {
@@ -68,9 +68,9 @@ public class AdminController {
         return ResponseEntity.ok(service.deleteById(id));
     }
     @GetMapping("/exists-id")
-    public ResponseEntity<AdminDTO> existsById(@RequestParam("id") Long id){
+    public ResponseEntity<AdminDto> existsById(@RequestParam("id") Long id){
         service.existsById(0L);
-        return ResponseEntity.ok(service.findById(id).orElseGet(AdminDTO::new));
+        return ResponseEntity.ok(service.findById(id).orElseGet(AdminDto::new));
     }
     @GetMapping("/count")
 
@@ -78,7 +78,7 @@ public class AdminController {
         return ResponseEntity.ok(service.count());
     }
     @PostMapping("/search-enpName")
-    public ResponseEntity<Optional<AdminModel>> findUsersByName(@RequestBody AdminDTO param) {
+    public ResponseEntity<Optional<AdminModel>> findUsersByName(@RequestBody AdminDto param) {
         //log.info("입력받은 정보 : {}", name );
         return ResponseEntity.ok(service.findAdminByUsername(param.getEnpName()));
     }
@@ -95,7 +95,7 @@ public class AdminController {
         return ResponseEntity.ok(flag);
     }
     @GetMapping("/search")
-    public ResponseEntity<Optional<AdminDTO>> findUserInfo(@RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<Optional<AdminDto>> findUserInfo(@RequestHeader("Authorization") String accessToken) {
         log.info("입력받은 정보 : {}", accessToken );
         return ResponseEntity.ok(service.findUserInfo(accessToken));
     }

@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import store.ggun.admin.domain.dto.AdminDTO;
-import store.ggun.admin.domain.dto.LoginDTO;
+import store.ggun.admin.domain.dto.LoginDto;
 import store.ggun.admin.domain.model.Messenger;
-import store.ggun.admin.service.AdminService;
 import store.ggun.admin.service.LoginService;
 
 
@@ -27,7 +25,7 @@ public class AdminAuthController {
     // -----------------------------------Query ---------------------------------------
 
     @PostMapping(path = "/login")
-    public ResponseEntity<Messenger> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<Messenger> login(@RequestBody LoginDto dto) {
         log.info("입력받은 정보 : {}", dto);
         Messenger messenger = service.login(dto);
         return ResponseEntity.ok(messenger);

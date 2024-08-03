@@ -1,5 +1,5 @@
 package store.ggun.admin.controller;
-import store.ggun.admin.domain.dto.ArticleDTO;
+import store.ggun.admin.domain.dto.ArticleDto;
 import store.ggun.admin.repository.jpa.ArticleRepository;
 import store.ggun.admin.serviceImpl.ArticleServiceImpl;
 import store.ggun.admin.domain.model.Messenger;
@@ -26,23 +26,23 @@ public class ArticleController {
 
     @SuppressWarnings("static-access")
     @PostMapping( "/save")
-    public ResponseEntity<Messenger> save(@RequestBody ArticleDTO dto) {
+    public ResponseEntity<Messenger> save(@RequestBody ArticleDto dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.save(dto));
 
     }
     @GetMapping("/list")
-    public ResponseEntity<List<ArticleDTO>> findByBoardId() throws SQLException {
+    public ResponseEntity<List<ArticleDto>> findByBoardId() throws SQLException {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<ArticleDTO> findById(@RequestParam("id") Long id) {
+    public ResponseEntity<ArticleDto> findById(@RequestParam("id") Long id) {
         log.info("입력받은 정보 : {}", id );
-        return ResponseEntity.ok(service.findById(id).orElseGet(ArticleDTO::new));
+        return ResponseEntity.ok(service.findById(id).orElseGet(ArticleDto::new));
     }
     @PutMapping ("/modify")
-    public ResponseEntity<Messenger> modify(@RequestBody ArticleDTO dto) {
+    public ResponseEntity<Messenger> modify(@RequestBody ArticleDto dto) {
         log.info("입력받은 정보 : {}", dto );
         return ResponseEntity.ok(service.modify(dto));
     }
@@ -61,7 +61,7 @@ public class ArticleController {
         return ResponseEntity.ok(new Messenger());
     }
     @GetMapping("/myList")
-    public ResponseEntity<List<ArticleDTO>> getArticleByBoardId(@RequestParam("id") Long boardId) {
+    public ResponseEntity<List<ArticleDto>> getArticleByBoardId(@RequestParam("id") Long boardId) {
         return ResponseEntity.ok(service.getArticleByBoardId(boardId));
     }
 }

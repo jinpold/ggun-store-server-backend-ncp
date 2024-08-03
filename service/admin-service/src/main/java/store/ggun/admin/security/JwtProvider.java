@@ -1,5 +1,5 @@
 package store.ggun.admin.security;
-import store.ggun.admin.domain.dto.AdminDTO;
+import store.ggun.admin.domain.dto.AdminDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -29,7 +29,7 @@ public class JwtProvider {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
     }
 
-    public String createToken(AdminDTO adminDto) {
+    public String createToken(AdminDto adminDto) {
 
         //Access Token
         String accessToken = Jwts.builder()
