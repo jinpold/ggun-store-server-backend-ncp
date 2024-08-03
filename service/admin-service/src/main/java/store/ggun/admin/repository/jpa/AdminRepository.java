@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends JpaRepository<AdminModel, Long> {
     Optional<AdminModel> findAdminByUsername(String enpName);
-    @Query("SELECT a FROM Admins a WHERE a.email = :email")
+    @Query("SELECT a FROM admins a WHERE a.email = :email")
     Optional<AdminModel> findAdminByEmail(@Param("email") String email);
     Optional<AdminModel> findAdminByRole(String Role);
 
