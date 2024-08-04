@@ -18,7 +18,7 @@ public class AuthRouter {
     @Bean
     RouterFunction<ServerResponse> authRoutes() {
         return RouterFunctions.route()
-                .POST("/auth/login", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::localLogin))
+                .POST("/auth/login/local", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::localLogin))
                 .POST("/auth/refresh", req -> authServiceImpl.refresh(req.headers().header("Authorization").get(0)))
                 .POST("/auth/logout", req -> authServiceImpl.logout(req.headers().header("Authorization").get(0)))
                 .POST("/auth/admin/login", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::adminLogin))
