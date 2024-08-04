@@ -22,7 +22,7 @@ public class AuthServiceImpl {
     private final JwtTokenProvider jwtTokenProvider;
 
     public Mono<ServerResponse> localLogin(LoginDto loginDTO) {
-        return login(loginDTO, "lb://user-service/auth/login");
+        return login(loginDTO, "lb://user-service/auth/login/local");
     }
 
     public Mono<ServerResponse> adminLogin(LoginDto loginDTO) {

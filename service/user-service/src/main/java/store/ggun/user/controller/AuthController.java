@@ -42,7 +42,7 @@ public class AuthController {
                 .build());
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login/local")
     public ResponseEntity<TokenVo> login(@RequestBody UserDto userDto){
         log.info("login user auth : {}", userDto);
 //        return null;
