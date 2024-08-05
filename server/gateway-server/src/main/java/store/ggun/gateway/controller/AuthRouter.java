@@ -21,7 +21,7 @@ public class AuthRouter {
                 .POST("/auth/login/local", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::localLogin))
                 .POST("/auth/refresh", req -> authServiceImpl.refresh(req.headers().header("Authorization").get(0)))
                 .POST("/auth/logout", req -> authServiceImpl.logout(req.headers().header("Authorization").get(0)))
-                .POST("/auth/admin/login", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::adminLogin))
+                .POST("/auth/admins/login", req -> req.bodyToMono(LoginDto.class).flatMap(authServiceImpl::adminLogin))
                 .build();
     }
 }

@@ -10,17 +10,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import store.ggun.gateway.domain.vo.ExceptionStatus;
 import store.ggun.gateway.domain.vo.Role;
+import store.ggun.gateway.exception.GatewayException;
 import store.ggun.gateway.service.provider.JwtTokenProvider;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
 @Component
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config>{
-
+public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> { //게이트웨이에서 filter를 생산
     private final JwtTokenProvider jwtTokenProvider;
 
     public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
@@ -37,37 +40,29 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     @Override
     public GatewayFilter apply(Config config) {
-        return ((exchange, chain) -> {
-            log.info("Request URL: {}", exchange.getRequest().getURI());
-            if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
-                return onError(exchange, HttpStatus.UNAUTHORIZED, "No Authorization Header");
-
-            @SuppressWarnings("null")
-            String token = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-
-            if(token == null)
-                return onError(exchange, HttpStatus.UNAUTHORIZED, "No Token or Invalid Token");
-
-            String jwt = jwtTokenProvider.removeBearer(token);
-
-            if(!jwtTokenProvider.isTokenValid(jwt, false))
-                return onError(exchange, HttpStatus.UNAUTHORIZED, "Invalid Token");
-
-            List<Role> roles = jwtTokenProvider.extractRoles(jwt).stream().map(i -> Role.valueOf(i)).toList();
-
-            for(var i : config.getRoles()){
-                if(roles.contains(i))
-                    return chain.filter(exchange);
-            }
-
-            return onError(exchange, HttpStatus.UNAUTHORIZED, "No Permission");
-        });
+        return ((exchange, chain) -> //exchange : 요청, 응답을 가지고 있는 객체, chain : 다음 필터로 요청을 넘기는 역할
+                Mono.just(exchange)
+                        .flatMap(i -> Mono.just(Objects.requireNonNull(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION))))
+                        .flatMap(i -> Mono.just(i.get(0)))
+                        .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED,"No Authorization Header")))
+                        .filterWhen(i -> Mono.just(i.startsWith("Bearer ")))
+                        .flatMap(i -> Mono.just(jwtTokenProvider.removeBearer(i)))
+                        .filterWhen(i -> Mono.just(jwtTokenProvider.isTokenValid(i, false)))
+                        .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.UNAUTHORIZED,"Invalid Token")))
+                        .flatMapMany(i -> Flux.just(jwtTokenProvider.extractRoles(i).stream().map(Role::valueOf).findAny().orElseGet(() -> Role.ROLE_GUEST)))
+                        .any(config.getRoles()::contains)
+                        .filter(i -> i)
+                        .switchIfEmpty(Mono.error(new GatewayException(ExceptionStatus.NO_PERMISSION, "No Permission")))
+                        .flatMap(i -> chain.filter(exchange))
+                        .onErrorResume(GatewayException.class, e -> onError(exchange, HttpStatusCode.valueOf(e.getStatus().getStatus().value()), e.getMessage()))
+                        .log()
+        );
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatusCode httpStatusCode, String message){
         log.error("Error Occured : {}, {}, {}", exchange.getRequest().getURI(), httpStatusCode, message);
         exchange.getResponse().setStatusCode(httpStatusCode);
-        DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(message.getBytes());
-        return exchange.getResponse().writeWith(Mono.just(buffer));
+        return exchange.getResponse().writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap(message.getBytes())));
     }
+
 }

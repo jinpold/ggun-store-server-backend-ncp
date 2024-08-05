@@ -4,7 +4,7 @@ package store.ggun.gateway.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -19,10 +19,11 @@ import store.ggun.gateway.service.provider.JwtTokenProvider;
 import java.net.URI;
 
 
-@Slf4j
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
+
     private final ObjectMapper objectMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,11 +33,13 @@ public class CustomAuthenticationSuccessHandler implements ServerAuthenticationS
         log.info("::::::authentication 정보: "+authentication);
         log.info("::::::getAuthorities 정보: "+authentication.getAuthorities());
         log.info("::::::getCredentials 정보: "+authentication.getCredentials());
-
         webFilterExchange.getExchange().getResponse().setStatusCode(HttpStatus.FOUND);
-        webFilterExchange.getExchange().getResponse().getHeaders().setLocation(URI.create("http://localhost:3000"));
+        authentication.getAuthorities().stream().filter(i -> i.getAuthority().equals("ROLE_USER")).findAny()
+                .ifPresentOrElse(
+                        i -> webFilterExchange.getExchange().getResponse().getHeaders().setLocation(URI.create("http://localhost:3000")),
+                        () -> webFilterExchange.getExchange().getResponse().getHeaders().setLocation(URI.create("http://localhost:3000/detail"))
+                );
         webFilterExchange.getExchange().getResponse().getHeaders().add("Content-Type", "application/json");
-
         return webFilterExchange.getExchange().getResponse()
                 .writeWith(
                         jwtTokenProvider.generateToken((PrincipalUserDetails)authentication.getPrincipal(), false)
@@ -86,9 +89,9 @@ public class CustomAuthenticationSuccessHandler implements ServerAuthenticationS
     }
 
 
-    private byte[] writeValueAsBytes(MessengerDto messengerDto) {
+    private byte[] writeValueAsBytes(MessengerDto messengerDTO) {
         try {
-            return objectMapper.writeValueAsBytes(messengerDto);
+            return objectMapper.writeValueAsBytes(messengerDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

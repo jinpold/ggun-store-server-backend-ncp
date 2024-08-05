@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .authorizationRequestResolver(serverOAuth2AuthorizationRequestResolver())
                         .authenticationSuccessHandler(customAuthenticationSuccessHandler)
-                        .authenticationFailureHandler(customAuthenicationFailureHandler)
+//                        .authenticationFailureHandler(customAuthenicationFailureHandler)
                 )
                 .build();
     }
