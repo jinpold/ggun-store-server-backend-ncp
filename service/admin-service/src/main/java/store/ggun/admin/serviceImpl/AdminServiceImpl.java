@@ -122,19 +122,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Messenger login(AdminDto adminDto) {
         log.info("login 진입 성공 email: {}", adminDto.getEmail());
-        Optional<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(adminDto.getEmail());
-        if (optionalAdminModel.isPresent()) {
-            AdminModel adminModel = optionalAdminModel.get();
+        List<AdminModel> admins = adminRepository.findAdminByEmail(adminDto.getEmail());
+
+        if (admins.size() == 1) {
+            AdminModel adminModel = admins.get(0);
             boolean flag = adminModel.getPassword().equals(adminDto.getPassword());
             return Messenger.builder()
                     .message(flag ? "SUCCESS" : "FAILURE")
                     .build();
-        } else {
+        } else if (admins.isEmpty()) {
             return Messenger.builder()
                     .message("User does not exist.")
                     .build();
+        } else {
+            return Messenger.builder()
+                    .message("Multiple users found with the same email. Please contact support.")
+                    .build();
         }
     }
+
 //        log.info("로그인 서비스로 들어온 파라미터 : " +dto);
 //        AdminModel adminModel = adminRepository.findAdminByUsername((dto.getUsername())).get();
 //        String accessToken = jwtProvider.createToken(entityToDto(adminModel));

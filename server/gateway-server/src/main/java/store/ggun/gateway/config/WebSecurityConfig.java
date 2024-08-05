@@ -17,16 +17,16 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import store.ggun.gateway.handler.CustomAuthenicationFailureHandler;
 import store.ggun.gateway.handler.CustomAuthenticationSuccessHandler;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final CustomAuthenicationFailureHandler customAuthenicationFailureHandler;
-    private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
 
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
 
     @Bean
     public ServerOAuth2AuthorizationRequestResolver serverOAuth2AuthorizationRequestResolver() {
@@ -40,28 +40,28 @@ public class WebSecurityConfig {
                 .authorizeExchange(authorize ->
                         authorize.anyExchange().permitAll()
                 )
-                .cors(i -> i.configurationSource(configurationSource()))
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
-                .httpBasic(i -> i.disable())
-                .csrf(i -> i.disable())
-                .formLogin(i -> i.disable())
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 활성화 및 설정 적용
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .oauth2Login(oauth -> oauth
                         .authorizationRequestResolver(serverOAuth2AuthorizationRequestResolver())
                         .authenticationSuccessHandler(customAuthenticationSuccessHandler)
-//                        .authenticationFailureHandler(customAuthenicationFailureHandler)
                 )
                 .build();
     }
+
     @Bean
-    public CorsConfigurationSource configurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://ggun.store"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:3000")); // allowedOriginPatterns 사용
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

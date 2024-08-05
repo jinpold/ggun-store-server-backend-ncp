@@ -9,6 +9,7 @@ import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.repository.jpa.AdminRepository;
 import store.ggun.admin.service.LoginService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -19,20 +20,21 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Messenger login(LoginDto admin) {
-        log.info("login 진입 성공 email: {}", admin.getEmail());
-        Optional<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(admin.getEmail());
-        if (optionalAdminModel.isPresent()) {
-            AdminModel adminModel = optionalAdminModel.get();
-            boolean flag = adminModel.getPassword().equals(admin.getPassword());
-            return Messenger.builder()
-                    .message(flag ? "SUCCESS" : "FAILURE")
-                    .build();
-        } else {
-            return Messenger.builder()
-                    .message("User does not exist.")
-                    .build();
-        }
+//        log.info("login 진입 성공 email: {}", admin.getEmail());
+//        List<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(admin.getEmail());
+//        if (optionalAdminModel.isPresent()) {
+//            AdminModel adminModel = optionalAdminModel.get();
+//            boolean flag = adminModel.getPassword().equals(admin.getPassword());
+//            return Messenger.builder()
+//                    .message(flag ? "SUCCESS" : "FAILURE")
+//                    .build();
+//        } else {
+//            return Messenger.builder()
+//                    .message("User does not exist.")
+//                    .build();
+//        }
+//    }
+        return null;
+
     }
-
-
 }
