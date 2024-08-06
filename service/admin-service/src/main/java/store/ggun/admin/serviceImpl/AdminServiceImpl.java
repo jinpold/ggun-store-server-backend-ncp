@@ -1,4 +1,5 @@
 package store.ggun.admin.serviceImpl;
+import store.ggun.admin.domain.vo.Role;
 import store.ggun.admin.security.JwtProvider;
 import store.ggun.admin.domain.model.Messenger;
 import store.ggun.admin.domain.model.AdminModel;
@@ -49,8 +50,8 @@ public class AdminServiceImpl implements AdminService {
         adminModel.setUsername(adminDto.getUsername());
         adminModel.setPassword(adminDto.getPassword());
         adminModel.setEmail(adminDto.getEmail());
-        adminModel.setEnpName(adminDto.getEnpName());
-        adminModel.setEnpNum(adminDto.getEnpNum());
+        adminModel.setName(adminDto.getName());
+        adminModel.setNumber(adminDto.getNumber());
         adminModel.setPhone(adminDto.getPhone());
         adminModel.setDepartment(adminDto.getDepartment());
         adminModel.setPosition(adminModel.getPosition());
@@ -84,13 +85,13 @@ public class AdminServiceImpl implements AdminService {
         AdminModel adminModel = adminRepository.findById(adminDto.getId())
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
         // 비밀번호를 사원번호로 변경
-        adminModel.setPassword(adminDto.getEnpNum());
+        adminModel.setPassword(adminDto.getNumber());
         adminRepository.save(adminModel);
 
         // 비밀번호가 정상적으로 변경되었는지 확인
         boolean isPasswordUpdated = adminRepository.findById(adminDto.getId())
                 .map(AdminModel::getPassword)
-                .map(password -> password.equals(adminDto.getEnpNum()))
+                .map(password -> password.equals(adminDto.getNumber()))
                 .orElse(false);
 
         return isPasswordUpdated ? Messenger.builder().message("SUCCESS").build()
@@ -118,28 +119,28 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.count();
     }
 
-    @Transactional
-    @Override
-    public Messenger login(AdminDto adminDto) {
-        log.info("login 진입 성공 email: {}", adminDto.getEmail());
-        List<AdminModel> admins = adminRepository.findAdminByEmail(adminDto.getEmail());
-
-        if (admins.size() == 1) {
-            AdminModel adminModel = admins.get(0);
-            boolean flag = adminModel.getPassword().equals(adminDto.getPassword());
-            return Messenger.builder()
-                    .message(flag ? "SUCCESS" : "FAILURE")
-                    .build();
-        } else if (admins.isEmpty()) {
-            return Messenger.builder()
-                    .message("User does not exist.")
-                    .build();
-        } else {
-            return Messenger.builder()
-                    .message("Multiple users found with the same email. Please contact support.")
-                    .build();
-        }
-    }
+//    @Transactional
+//    @Override
+//    public Messenger login(AdminDto adminDto) {
+//        log.info("login 진입 성공 email: {}", adminDto.getEmail());
+//        List<AdminModel> admins = adminRepository.findAdminByEmail(adminDto.getEmail());
+//
+//        if (admins.size() == 1) {
+//            AdminModel adminModel = admins.get(0);
+//            boolean flag = adminModel.getPassword().equals(adminDto.getPassword());
+//            return Messenger.builder()
+//                    .message(flag ? "SUCCESS" : "FAILURE")
+//                    .build();
+//        } else if (admins.isEmpty()) {
+//            return Messenger.builder()
+//                    .message("User does not exist.")
+//                    .build();
+//        } else {
+//            return Messenger.builder()
+//                    .message("Multiple users found with the same email. Please contact support.")
+//                    .build();
+//        }
+//    }
 
 //        log.info("로그인 서비스로 들어온 파라미터 : " +dto);
 //        AdminModel adminModel = adminRepository.findAdminByUsername((dto.getUsername())).get();
@@ -169,13 +170,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Optional<AdminModel> findAdminByRole(String role) {
-        return adminRepository.findAdminByRole(role);
-    }
-
-    @Override
-    public Optional<AdminModel> findAdminByUsername(String enpName) {
-        return adminRepository.findAdminByUsername(enpName);
+    public Optional<AdminModel> findAdminByUsername(String name) {
+        return adminRepository.findAdminByUsername(name);
     }
 
     @Transactional

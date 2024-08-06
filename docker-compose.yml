@@ -9,7 +9,7 @@ services:
     ports:
       - "8761:8761"
     networks:
-      - ggun-net
+      - ggun-network
     healthcheck:
       test: ["CMD-SHELL", "curl -sS http://localhost:8761/actuator/health | grep -q '\"status\":\"UP\"'"]
       interval: 10s
@@ -21,7 +21,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - ggun-net
+      - ggun-network
 
   kafka:
     image: wurstmeister/kafka:latest
@@ -39,7 +39,7 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - ggun-net
+      - ggun-network
 
   gateway:
     hostname: gateway-server
@@ -54,7 +54,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
     healthcheck:
       test: ["CMD-SHELL", "curl -sS http://localhost:8000/actuator/health | grep -q '\"status\":\"UP\"'"]
       interval: 10s
@@ -76,7 +76,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
 
   admin:
     hostname: admin-service
@@ -93,7 +93,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
 
   chat:
     hostname: chat-service
@@ -110,7 +110,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
 
   alarm:
     hostname: alarm-service
@@ -127,7 +127,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
 
   user:
     hostname: user-service
@@ -144,7 +144,7 @@ services:
       eureka:
         condition: service_healthy
     networks:
-      - ggun-net
+      - ggun-network
 
 networks:
   ggun-net:

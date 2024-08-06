@@ -5,17 +5,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import store.ggun.admin.domain.vo.Role;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface AdminRepository extends JpaRepository<AdminModel, Long> {
-    Optional<AdminModel> findAdminByUsername(String enpName);
+    Optional<AdminModel> findAdminByUsername(String name);
     @Query("SELECT a FROM admins a WHERE a.email = :email")
-    List<AdminModel> findAdminByEmail(@Param("email") String email);
-
-    Optional<AdminModel> findAdminByRole(String Role);
+    Optional<AdminModel> findAdminByEmail(@Param("email") String email);
 
     @Query("select count(id) as count from admins where email =:email")
     Integer existsByEmail(@Param("email") String username);

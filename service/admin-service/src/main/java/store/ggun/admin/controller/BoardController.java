@@ -56,6 +56,7 @@ public class BoardController {
     public ResponseEntity<Long> count()  {
         return ResponseEntity.ok(service.count());
     }
+
     @GetMapping("/exists/{id}")
     public ResponseEntity<Messenger> existsById(PageRequestVo vo){
         service.existsById(0L);

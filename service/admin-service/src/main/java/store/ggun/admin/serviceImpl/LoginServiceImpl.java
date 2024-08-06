@@ -4,13 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import store.ggun.admin.domain.dto.LoginDto;
+import store.ggun.admin.domain.dto.PrincipalUserDetails;
 import store.ggun.admin.domain.model.AdminModel;
-import store.ggun.admin.domain.model.Messenger;
+import store.ggun.admin.domain.model.UserModel;
+import store.ggun.admin.domain.vo.ExceptionStatus;
+import store.ggun.admin.domain.vo.Role;
+import store.ggun.admin.handler.LoginException;
 import store.ggun.admin.repository.jpa.AdminRepository;
 import store.ggun.admin.service.LoginService;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -19,22 +23,22 @@ public class LoginServiceImpl implements LoginService {
     private final AdminRepository adminRepository;
 
     @Override
-    public Messenger login(LoginDto admin) {
-//        log.info("login 진입 성공 email: {}", admin.getEmail());
-//        List<AdminModel> optionalAdminModel = adminRepository.findAdminByEmail(admin.getEmail());
-//        if (optionalAdminModel.isPresent()) {
-//            AdminModel adminModel = optionalAdminModel.get();
-//            boolean flag = adminModel.getPassword().equals(admin.getPassword());
-//            return Messenger.builder()
-//                    .message(flag ? "SUCCESS" : "FAILURE")
-//                    .build();
-//        } else {
-//            return Messenger.builder()
-//                    .message("User does not exist.")
-//                    .build();
-//        }
-//    }
-        return null;
-
+    public PrincipalUserDetails login(LoginDto dto) {
+        AdminModel admin = adminRepository.findAdminByEmail(dto.getEmail())
+                .orElseThrow(() -> new LoginException(ExceptionStatus.UNAUTHORIZED, "존재하지 않는 관리자입니다."));
+        log.info("Email: {}, Password: {}", dto.getEmail(), dto.getPassword());
+        if (admin.getPassword().equals(dto.getPassword())) {
+            log.info("admin.getPassword: {}, dto.Password: {}", admin.getPassword(), dto.getPassword());
+            PrincipalUserDetails userDetails = new PrincipalUserDetails(UserModel.builder()
+                    .id(String.valueOf(admin.getId()))
+                    .name(admin.getName())
+                    .email(admin.getEmail())
+                    .roles(List.of(Role.ROLE_ADMIN))
+                    .build());
+            log.info("PrincipalUserDetails: {}", userDetails);
+            return userDetails;
+        } else {
+            throw new LoginException(ExceptionStatus.INVALID_PASSWORD, "비밀번호가 일치하지 않습니다.");
+        }
     }
 }

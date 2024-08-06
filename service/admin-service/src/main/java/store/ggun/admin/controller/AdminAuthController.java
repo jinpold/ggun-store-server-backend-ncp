@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import store.ggun.admin.domain.dto.AdminDto;
 import store.ggun.admin.domain.dto.LoginDto;
+import store.ggun.admin.domain.dto.PrincipalUserDetails;
 import store.ggun.admin.domain.model.Messenger;
-import store.ggun.admin.service.AdminService;
 import store.ggun.admin.service.LoginService;
 
 
@@ -21,20 +20,14 @@ import store.ggun.admin.service.LoginService;
 @RequestMapping(path = "/auth")
 @Slf4j
 public class AdminAuthController {
-    private final AdminService service;
+    private final LoginService service;
 
     // -----------------------------------Query ---------------------------------------
 
     @PostMapping(path = "/login")
-    public ResponseEntity<Messenger> login(@RequestBody AdminDto dto) {
+    public PrincipalUserDetails login(@RequestBody LoginDto dto) {
         log.info("입력받은 정보 : {}", dto);
-        Messenger messenger = service.login(dto);
-        return ResponseEntity.ok(messenger);
+        return service.login(dto);
+
     }
-//    @GetMapping("/exists-username")
-//    public ResponseEntity<Boolean> existsByUsername(@RequestParam("username") String username) {
-//        log.info("existsByUsername 파라미터 정보:"+username);
-//        log.info("existsByUsername 결과:" + username);
-//        return ResponseEntity.ok(service.existsByUsername(username));
-//    }
 }

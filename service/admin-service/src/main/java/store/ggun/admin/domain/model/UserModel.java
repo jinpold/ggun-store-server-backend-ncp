@@ -1,23 +1,22 @@
-package store.ggun.admin.domain.dto;
+package store.ggun.admin.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import store.ggun.admin.domain.vo.Registration;
 import store.ggun.admin.domain.vo.Role;
+
 import java.util.List;
 
-@Data
+@Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
+@AllArgsConstructor
+public class UserModel {
+    private String id;
     private String email;
-    private String password;
-    private List<Role> role;
-    private AdminDto Admin;
+    private String name;
+    private List<Role> roles;
     private Registration registration;
 }
-
-
